@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator</title> 
+    <style>
+        body {
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f4f4f4;
+        }
+        .calculator {
+            height: auto;
+            width: auto;
+            border: 5px solid black;
+            padding: 10px;
+            background-color: #ffffff;
+            color: white;
+            width: 30vw;
+            border-spacing: 10px;
+        }
+        .calculator tr, th, td {
+            border: 2px solid black;
+            background-color: rgb(77, 74, 74);
+            height: 9vh;
+            width: 10vw;
+            text-align: center;
+            font-size: 35px;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 15px;  /* Increase margin */
+            border-radius: 50%;
+        }
+        .display {
+            background-color: rgb(253, 253, 253);
+            color: black;
+            text-align: right;
+            font-size: 35px;
+            padding-right: 10px;
+            border-radius: 0;
+
+        }
+
+        @media screen and (max-width: 1500px) {
+            .calculator{
+                width: 50vh;
+            }
+          }
+    </style>        
+</head>
+<body>
+    <table class="calculator">
+        <tr>
+            <th colspan="4" rowspan="2" class="display" id="display"></th>
+        </tr>
+
+        <tr></tr>
+
+        <tr>
+            <td onclick="clearDisplay()">AC</td>
+            <td onclick="backspace()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-backspace" viewBox="0 0 16 16">
+                    <path d="M5.83 5.146a.5.5 0 0 0 0 .708L7.975 8l-2.147 2.146a.5.5 0 0 0 .707.708l2.147-2.147 2.146 2.147a.5.5 0 0 0 .707-.708L9.39 8l2.146-2.146a.5.5 0 0 0-.707-.708L8.683 7.293 6.536 5.146a.5.5 0 0 0-.707 0z"/>
+                    <path d="M13.683 1a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-7.08a2 2 0 0 1-1.519-.698L.241 8.65a1 1 0 0 1 0-1.302L5.084 1.7A2 2 0 0 1 6.603 1zm-7.08 1a1 1 0 0 0-.76.35L1 8l4.844 5.65a1 1 0 0 0 .759.35h7.08a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1z"/>
+                </svg>
+            </td>
+            <td onclick="appendToDisplay('±')">±</td>
+            <td onclick="appendToDisplay('/')">/</td>
+        </tr>
+
+        <tr>
+            <td onclick="appendToDisplay('7')">7</td>
+            <td onclick="appendToDisplay('8')">8</td>
+            <td onclick="appendToDisplay('9')">9</td>
+            <td onclick="appendToDisplay('*')">X</td>
+        </tr>
+
+        <tr>
+            <td onclick="appendToDisplay('4')">4</td>
+            <td onclick="appendToDisplay('5')">5</td>
+            <td onclick="appendToDisplay('6')">6</td>
+            <td onclick="appendToDisplay('-')">-</td>
+        </tr>
+
+        <tr>
+            <td onclick="appendToDisplay('1')">1</td>
+            <td onclick="appendToDisplay('2')">2</td>
+            <td onclick="appendToDisplay('3')">3</td>
+            <td onclick="appendToDisplay('+')">+</td>
+        </tr>
+
+        <tr>
+            <td onclick="appendToDisplay('%')">%</td>
+            <td onclick="appendToDisplay('0')">0</td>
+            <td onclick="appendToDisplay('.')">.</td>
+            <td onclick="calculate()">=</td>
+        </tr>
+
+    </table>
+
+    <script>
+        let display = document.getElementById('display');
+
+        function clearDisplay() {
+            display.innerText = '';
+        }
+
+        function backspace() {
+            display.innerText = display.innerText.slice(0, -1);
+        }
+
+        function appendToDisplay(value) {
+            if (value === '±') {
+                if (display.innerText.startsWith('-')) {
+                    display.innerText = display.innerText.slice(1);
+                } else {
+                    display.innerText = '-' + display.innerText;
+                }
+            } else {
+                display.innerText += value;
+            }
+        }
+
+        function calculate() {
+            try {
+                display.innerText = eval(display.innerText.replace('X', '*').replace('%', '/100'));
+            } catch {
+                display.innerText = 'Error';
+            }
+        }
+        
+        document.addEventListener('keydown', function(event) {
+            const key = event.key;
+            if ((key >= '0' && key <= '9') || key === '.' || key === '+' || key === '-' || key === '*' || key === '/' || key === '%') {
+                appendToDisplay(key);
+            } else if (key === 'Enter' || key === '=') {
+                calculate();
+            } else if (key === 'Backspace') {
+                backspace();
+            } else if (key === 'Escape') {
+                clearDisplay();
+            } else if (key === '±') {
+                appendToDisplay('±');
+            }
+        });
+        
+        /*
+        document.addEventListener('keydown', function(event) {
+            const key=event.key;
+            switch (key) {
+                case '1':
+                    appendToDisplay('1');
+                    break;
+                case '2':
+                    appendToDisplay('2');
+                    break;
+                case '3':
+                    appendToDisplay('3');
+                    break;
+                case '4':
+                    appendToDisplay('4');
+                    break;
+                case '5':
+                    appendToDisplay('5');
+                    break;
+                case '6':
+                    appendToDisplay('6');
+                    break;
+                case '7':
+                    appendToDisplay('7');
+                    break;
+                case '8':
+                    appendToDisplay('8');
+                    break;
+                case '9':
+                    appendToDisplay('9');
+                    break;
+                case '0':
+                    appendToDisplay('0');
+                    break;    
+                case 'Enter':
+                    calculate();
+                    break;
+                case '+':
+                    appendToDisplay('+');
+                    break;
+                case '-':
+                    appendToDisplay('-');
+                    break;
+                case '*':
+                    appendToDisplay('*');
+                    break;
+                case '/':
+                    appendToDisplay('/');
+                    break;
+                case '%':
+                    appendToDisplay('%');
+                    break;
+                case 'Backspace':
+                    backspace();
+                    break;
+                case 'Esc':
+                    clearDisplay();
+                    break;
+                default:
+                    result = "Invalid Operator";
+            }
+        }
+        );
+*/
+    </script>
+</body>
+</html>
